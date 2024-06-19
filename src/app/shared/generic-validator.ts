@@ -35,11 +35,11 @@ export class GenericValidator {
         } else {
           // Only validate if there are validation messages for the control
           if (this.validationMessages[controlKey]) {
-            //TODO: messages[controlKey] = '';
+            (messages as any)[controlKey] = '';
             if ((c.dirty || c.touched) && c.errors) {
               Object.keys(c.errors).map(messageKey => {
                 if (this.validationMessages[controlKey][messageKey]) {
-                  //TODO: messages[controlKey] += this.validationMessages[controlKey][messageKey] + ' ';
+                  (messages as any)[controlKey] += this.validationMessages[controlKey][messageKey] + ' ';
                 }
               });
             }
