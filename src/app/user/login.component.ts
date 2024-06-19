@@ -11,7 +11,7 @@ import { AuthService } from './auth.service';
 export class LoginComponent implements OnInit {
   pageTitle = 'Log In';
 
-  maskUserName: boolean;
+  maskUserName: boolean =false;
 
   constructor(private authService: AuthService, private router: Router) { }
 

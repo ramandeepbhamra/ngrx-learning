@@ -21,7 +21,7 @@ import { UserModule } from './user/user.module';
   imports: [
     BrowserModule,
     HttpClientModule,
-    //HttpClientInMemoryWebApiModule.forRoot(ProductData),
+    HttpClientInMemoryWebApiModule.forRoot(ProductData),
     UserModule,
     AppRoutingModule
   ],

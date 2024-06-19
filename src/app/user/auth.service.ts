@@ -6,8 +6,8 @@ import { User } from './user';
     providedIn: 'root',
 })
 export class AuthService {
-    currentUser: User | null;
-    redirectUrl: string;
+    currentUser: User | null = null;
+    redirectUrl: string = "";
 
     constructor() { }
 
