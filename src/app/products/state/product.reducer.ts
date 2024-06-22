@@ -5,7 +5,7 @@ export const productReducer = createReducer(
   on(createAction("[Product] Toggle Product Code"), (state) => {
     return { 
         ...state,
-        shwowProducts: !state.shwowProductCode 
+        shwowProductCode: !state.shwowProductCode 
     };
   })
 );
