@@ -8,12 +8,22 @@ export interface State extends AppState.State {
 
 export interface ProductState {
   shwowProductCode: boolean;
-  currentProduct: Product;
+  currentProduct: Product | null;
   products: Product[];
 }
 
+const initialState: ProductState = {
+  shwowProductCode: true,
+  currentProduct: null,
+  products: [],
+};
+
 export const productReducer = createReducer<ProductState>(
-  { shwowProductCode: true } as ProductState,
+  //Chapter 2
+  //{ shwowProductCode: true } as ProductState,
+  //Chapter 1
+  //{ shwowProductCode: true },
+  initialState,
   on(createAction('[Product] Toggle Product Code'), (state): ProductState => {
     return {
       ...state,

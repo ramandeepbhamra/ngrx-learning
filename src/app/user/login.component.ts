@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
     this.store.select('users').subscribe(
       users => {
         if(users)
-          this.maskUserName = users.maskuserNameOrNot;
+          this.maskUserName = users.maskUserNameOrNot;
       } 
     );
   }
