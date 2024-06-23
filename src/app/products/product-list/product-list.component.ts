@@ -5,7 +5,12 @@ import { Subscription } from 'rxjs';
 import { Product } from '../product';
 import { ProductService } from '../product.service';
 import { Store } from '@ngrx/store';
-import { State, getShowProductCode } from '../state/product.reducer';
+import {
+  State,
+  getCurrentProduct,
+  getShowProductCode,
+} from '../state/product.reducer';
+import * as ProductActions from '../state/product.actions';
 
 @Component({
   selector: 'pm-product-list',
@@ -30,9 +35,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.sub = this.productService.selectedProductChanges$.subscribe(
-      (currentProduct) => (this.selectedProduct = currentProduct)
-    );
+    //TODO: Unsubscibe
+    this.store
+      .select(getCurrentProduct)
+      .subscribe((currentProduct) => (this.selectedProduct = currentProduct));
+    // Before Chapter 7
+    // this.sub = this.productService.selectedProductChanges$.subscribe(
+    //   (currentProduct) => (this.selectedProduct = currentProduct)
+    // );
 
     this.productService.getProducts().subscribe({
       next: (products: Product[]) => (this.products = products),
@@ -40,15 +50,15 @@ export class ProductListComponent implements OnInit, OnDestroy {
     });
 
     //TODO: Unsubscibe
-    this.store.select(getShowProductCode).subscribe(
-      showProductCode => this.displayCode = showProductCode
-    );
-    
+    this.store
+      .select(getShowProductCode)
+      .subscribe((showProductCode) => (this.displayCode = showProductCode));
+
     // Chapter 1
     // this.store.select('products').subscribe(
     //   products => {
     //       this.displayCode = products.showProductCode
-    //   } 
+    //   }
     // );
   }
 
@@ -57,17 +67,25 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   checkChanged(): void {
+    this.store.dispatch(ProductActions.toggleProductCode());
+
+    // Before Chapter 7
+    // this.store.dispatch({
+    //   type: '[Product] Toggle Product Code',
+    // });
+
     //this.displayCode = !this.displayCode;
-    this.store.dispatch({
-      type: '[Product] Toggle Product Code',
-    });
   }
 
   newProduct(): void {
-    this.productService.changeSelectedProduct(this.productService.newProduct());
+    this.store.dispatch(ProductActions.initilizeCurrentProduct());
+    // Before Chapter 7
+    //this.productService.changeSelectedProduct(this.productService.newProduct());
   }
 
   productSelected(product: Product): void {
-    this.productService.changeSelectedProduct(product);
+    this.store.dispatch(ProductActions.setCurrentProduct({ product }));
+    // Before Chapter 7
+    //this.productService.changeSelectedProduct(product);
   }
 }

@@ -1,5 +1,6 @@
 import {
-  createAction,
+  // Before Chapter 7
+  //createAction,
   createFeatureSelector,
   createReducer,
   createSelector,
@@ -7,6 +8,7 @@ import {
 } from '@ngrx/store';
 import { Product } from '../product';
 import * as AppState from '../../state/app.state';
+import * as ProductActions from '../state/product.actions';
 
 export interface State extends AppState.State {
   products: ProductState;
@@ -15,16 +17,14 @@ export interface State extends AppState.State {
 export interface ProductState {
   showProductCode: boolean;
   currentProductId: number | null;
-  // Chapter 1
-  //currentProduct: Product | null;
+  currentProduct: Product | null;
   products: Product[];
 }
 
 const initialState: ProductState = {
   showProductCode: true,
   currentProductId: null,
-  // Chapter 1
-  //currentProduct: null,
+  currentProduct: null,
   products: [],
 };
 
@@ -48,10 +48,14 @@ export const getCurrentProductId = createSelector(
 
 export const getCurrentProduct = createSelector(
   getProductFeatureState,
+  (state) => state.currentProduct
+);
+
+export const getCurrentProductByProductid = createSelector(
+  getProductFeatureState,
   getCurrentProductId,
-  (state, currentProductId) => {
-    state.products.find((p) => p.id == currentProductId);
-  }
+  (state, currentProductId) =>
+    state.products.find((p) => p.id == currentProductId)
 );
 
 export const getProducts = createSelector(
@@ -65,21 +69,52 @@ export const productReducer = createReducer<ProductState>(
   //Chapter 1
   //{ shwowProductCode: true },
   initialState,
-  on(createAction('[Product] Toggle Product Code'), (state): ProductState => {
+  on(ProductActions.toggleProductCode, (state): ProductState => {
     return {
       ...state,
       showProductCode: !state.showProductCode,
     };
+  }),
+  on(ProductActions.setCurrentProduct, (state, action): ProductState => {
+    return {
+      ...state,
+      currentProduct: action.product,
+    };
+  }),
+  on(ProductActions.clearCurrentProduct, (state): ProductState => {
+    return {
+      ...state,
+      currentProduct: null,
+    };
+  }),
+  on(ProductActions.initilizeCurrentProduct, (state): ProductState => {
+    return {
+      ...state,
+      currentProduct: {
+        id: 0,
+        productName: '',
+        productCode: 'New',
+        description: '',
+        starRating: 0,
+      },
+    };
   })
-);
 
-// Chapter 1
-// export const productReducer = createReducer(
-//   { shwowProductCode: true },
-//   on(createAction('[Product] Toggle Product Code'), (state) => {
-//     return {
-//       ...state,
-//       shwowProductCode: !state.shwowProductCode,
-//     };
-//   })
-// );
+  // Before Chapter 7
+  //   on(createAction('[Product] Toggle Product Code'), (state): ProductState => {
+  //     return {
+  //       ...state,
+  //       showProductCode: !state.showProductCode,
+  //     };
+  //   })
+
+  // Chapter 1
+  // export const productReducer = createReducer(
+  //   { shwowProductCode: true },
+  //   on(createAction('[Product] Toggle Product Code'), (state) => {
+  //     return {
+  //       ...state,
+  //       shwowProductCode: !state.shwowProductCode,
+  //     };
+  //   })
+);
