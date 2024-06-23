@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from './auth.service';
 import { Store } from '@ngrx/store';
+import { getMaskUserNameOrNot } from './state/user.reducer';
 
 @Component({
   templateUrl: './login.component.html',
@@ -22,12 +23,18 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     //TODO: Unsubscibe
-    this.store.select('users').subscribe(
-      users => {
-        if(users)
-          this.maskUserName = users.maskUserNameOrNot;
-      } 
-    );
+    this.store
+      .select(getMaskUserNameOrNot)
+      .subscribe(
+        (maskUserNameOrNot) => (this.maskUserName = maskUserNameOrNot)
+      );
+
+    //Chapter 1
+    // this.store.select('users').subscribe(
+    //   users => {
+    //       this.maskUserName = users.maskUserNameOrNot;
+    //   }
+    // );
   }
 
   cancel(): void {
