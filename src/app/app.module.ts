@@ -18,6 +18,7 @@ import { PageNotFoundComponent } from './home/page-not-found.component';
 import { UserModule } from './user/user.module';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     UserModule,
     AppRoutingModule,
     StoreModule.forRoot({}, {}),
-    StoreDevtoolsModule.instrument({ name: "NGRX Learning", maxAge: 25, logOnly: !isDevMode() })
+    StoreDevtoolsModule.instrument({ name: "NGRX Learning", maxAge: 25, logOnly: !isDevMode() }),
+    EffectsModule.forRoot([])
   ],
   declarations: [
     AppComponent,

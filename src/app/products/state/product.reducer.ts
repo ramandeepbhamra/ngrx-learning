@@ -19,6 +19,7 @@ export interface ProductState {
   currentProductId: number | null;
   currentProduct: Product | null;
   products: Product[];
+  error: string;
 }
 
 const initialState: ProductState = {
@@ -26,6 +27,7 @@ const initialState: ProductState = {
   currentProductId: null,
   currentProduct: null,
   products: [],
+  error: '',
 };
 
 const getProductFeatureState = createFeatureSelector<ProductState>('products');
@@ -39,12 +41,6 @@ export const getCurrentProductId = createSelector(
   getProductFeatureState,
   (state) => state.currentProductId
 );
-
-// Chapter 1
-// export const getCurrentProduct = createSelector(
-//   getProductFeatureState,
-//   (state) => state.currentProduct
-// );
 
 export const getCurrentProduct = createSelector(
   getProductFeatureState,
@@ -63,11 +59,12 @@ export const getProducts = createSelector(
   (state) => state.products
 );
 
+export const getError = createSelector(
+  getProductFeatureState,
+  (state) => state.error
+);
+
 export const productReducer = createReducer<ProductState>(
-  //Chapter 2
-  //{ shwowProductCode: true } as ProductState,
-  //Chapter 1
-  //{ shwowProductCode: true },
   initialState,
   on(ProductActions.toggleProductCode, (state): ProductState => {
     return {
@@ -98,23 +95,19 @@ export const productReducer = createReducer<ProductState>(
         starRating: 0,
       },
     };
+  }),
+  on(ProductActions.loadProductsSucess, (state, action): ProductState => {
+    return {
+      ...state,
+      products: action.products,
+      error: '',
+    };
+  }),
+  on(ProductActions.loadProductsFailure, (state): ProductState => {
+    return {
+      ...state,
+      products: [],
+      error: state.error,
+    };
   })
-
-  // Before Chapter 7
-  //   on(createAction('[Product] Toggle Product Code'), (state): ProductState => {
-  //     return {
-  //       ...state,
-  //       showProductCode: !state.showProductCode,
-  //     };
-  //   })
-
-  // Chapter 1
-  // export const productReducer = createReducer(
-  //   { shwowProductCode: true },
-  //   on(createAction('[Product] Toggle Product Code'), (state) => {
-  //     return {
-  //       ...state,
-  //       shwowProductCode: !state.shwowProductCode,
-  //     };
-  //   })
 );

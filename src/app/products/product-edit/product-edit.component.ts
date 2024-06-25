@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, tap } from 'rxjs';
 
 import { Product } from '../product';
 import { ProductService } from '../product.service';
@@ -25,13 +25,11 @@ export class ProductEditComponent implements OnInit, OnDestroy {
   errorMessage = '';
   productForm!: FormGroup;
 
-  product!: Product | null;
-  sub!: Subscription;
-
   // Use with the generic validation message class
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
+  product$!: Observable<Product | null>;
 
   constructor(
     private store: Store<State>,
@@ -76,9 +74,9 @@ export class ProductEditComponent implements OnInit, OnDestroy {
     });
 
     //TODO: Unsubscibe
-    this.store
+    this.product$ = this.store
       .select(getCurrentProduct)
-      .subscribe((currentProduct) => this.displayProduct(currentProduct));
+      .pipe(tap((currentProduct) => this.displayProduct(currentProduct)));
 
     // Before Chapter 7
     // Watch for changes to the currently selected product
@@ -96,7 +94,6 @@ export class ProductEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
   }
 
   // Also validate on blur
@@ -109,8 +106,6 @@ export class ProductEditComponent implements OnInit, OnDestroy {
 
   displayProduct(product: Product | null): void {
     // Set the local product property
-    this.product = product;
-
     if (product) {
       // Reset the form back to pristine
       this.productForm.reset();
