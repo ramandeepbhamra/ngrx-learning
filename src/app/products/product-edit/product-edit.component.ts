@@ -93,8 +93,7 @@ export class ProductEditComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-  }
+  ngOnDestroy(): void {}
 
   // Also validate on blur
   // Helpful if the user tabs through required fields
@@ -164,22 +163,14 @@ export class ProductEditComponent implements OnInit, OnDestroy {
           this.productService.createProduct(product).subscribe({
             next: (p) =>
               this.store.dispatch(
-                ProductActions.setCurrentProduct({ product: p })
+                ProductActions.setCurrentProduct({ currentProductId: p.id })
               ),
             // Before Chapter 7
             //next: (p) => this.productService.changeSelectedProduct(p),
             error: (err) => (this.errorMessage = err),
           });
         } else {
-          this.productService.updateProduct(product).subscribe({
-            next: (p) =>
-              this.store.dispatch(
-                ProductActions.setCurrentProduct({ product: p })
-              ),
-            // Before Chapter 7
-            //next: (p) => this.productService.changeSelectedProduct(p),
-            error: (err) => (this.errorMessage = err),
-          });
+          this.store.dispatch(ProductActions.updateProduct({ product }));
         }
       }
     }
