@@ -135,19 +135,11 @@ export class ProductEditComponent implements OnInit, OnDestroy {
   deleteProduct(product: Product): void {
     if (product && product.id) {
       if (confirm(`Really delete the product: ${product.productName}?`)) {
-        this.productService.deleteProduct(product.id).subscribe({
-          next: () => this.store.dispatch(ProductActions.clearCurrentProduct()),
-          // Before Chapter 7
-          //next: () => this.productService.changeSelectedProduct(null),
-          error: (err) => (this.errorMessage = err),
-        });
+        this.store.dispatch(ProductActions.deleteProduct({ id : product.id }));
       }
     } else {
-      this.store.dispatch(ProductActions.clearCurrentProduct());
-
       // No need to delete, it was never saved
-      // Before Chapter 7
-      //this.productService.changeSelectedProduct(null);
+      this.store.dispatch(ProductActions.clearCurrentProduct());
     }
   }
 
@@ -160,15 +152,7 @@ export class ProductEditComponent implements OnInit, OnDestroy {
         const product = { ...originalProduct, ...this.productForm.value };
 
         if (product.id === 0) {
-          this.productService.createProduct(product).subscribe({
-            next: (p) =>
-              this.store.dispatch(
-                ProductActions.setCurrentProduct({ currentProductId: p.id })
-              ),
-            // Before Chapter 7
-            //next: (p) => this.productService.changeSelectedProduct(p),
-            error: (err) => (this.errorMessage = err),
-          });
+          this.store.dispatch(ProductActions.addProduct({ product }));
         } else {
           this.store.dispatch(ProductActions.updateProduct({ product }));
         }
