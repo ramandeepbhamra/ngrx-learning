@@ -51,7 +51,7 @@ export class ProductShellComponent implements OnInit, OnDestroy {
 
   deleteProduct(product: Product): void {
     //TODO: Check again { id: product.id ?? 0 }
-    //this.store.dispatch(ProductPageActions.deleteProduct({ id }));
+    this.store.dispatch(ProductPageActions.deleteProduct({ id: product.id ?? 0 }));
   }
 
   clearProduct(): void {
