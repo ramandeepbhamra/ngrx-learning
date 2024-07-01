@@ -12,9 +12,8 @@ import { Store } from '@ngrx/store';
 import {
   State,
   getCurrentProduct,
-  getShowProductCode,
-} from '../state/product.reducer';
-import * as ProductActions from '../state/product.actions';
+} from '../state';
+import {ProductPageActions, ProductAPIActions} from '../state/actions';
 
 @Component({
   selector: 'pm-product-edit',
@@ -135,11 +134,11 @@ export class ProductEditComponent implements OnInit, OnDestroy {
   deleteProduct(product: Product): void {
     if (product && product.id) {
       if (confirm(`Really delete the product: ${product.productName}?`)) {
-        this.store.dispatch(ProductActions.deleteProduct({ id : product.id }));
+        this.store.dispatch(ProductPageActions.deleteProduct({ id : product.id }));
       }
     } else {
       // No need to delete, it was never saved
-      this.store.dispatch(ProductActions.clearCurrentProduct());
+      this.store.dispatch(ProductPageActions.clearCurrentProduct());
     }
   }
 
@@ -152,9 +151,9 @@ export class ProductEditComponent implements OnInit, OnDestroy {
         const product = { ...originalProduct, ...this.productForm.value };
 
         if (product.id === 0) {
-          this.store.dispatch(ProductActions.addProduct({ product }));
+          this.store.dispatch(ProductPageActions.addProduct({ product }));
         } else {
-          this.store.dispatch(ProductActions.updateProduct({ product }));
+          this.store.dispatch(ProductPageActions.updateProduct({ product }));
         }
       }
     }
